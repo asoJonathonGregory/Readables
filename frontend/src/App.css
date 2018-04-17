@@ -1,0 +1,233 @@
+* {
+	font-size: 16px;
+}
+
+button {
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+h3 {
+	font-size: 1.5em;
+}
+
+.head-section {
+	text-align: center;
+}
+
+.category-name {
+	text-transform: capitalize;
+	font-size:	1em;
+}
+
+.main-controls {
+	text-align: center;
+	margin-bottom: 2em;
+}
+
+.post-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.post {
+	padding: 1em;
+	flex: 0 1 28%;
+	min-height: 160px;
+	border: 2px solid #333;
+	border-radius: 4px;
+	box-shadow: 10px 10px 8px #888888;
+	margin: 0 .5em 1em .5em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.post p {
+	margin: 0;
+}
+
+.post-title {
+	font-weight: 700;
+	font-size: 1.25em;
+}
+
+.post-body {
+	padding: .5em 0;
+}
+
+.post-footer-top-row {
+	display: flex;
+	justify-content: space-between;
+	padding: 2em 0 1em 0;
+}
+
+.post-vote-score {
+	padding: 0 .5em;
+}
+
+.post-author {
+	padding: 0 0 0 1em;
+	font-style: italic;
+}
+
+.post-controls {
+	display: flex;
+	justify-content: space-between;
+	padding: 1em 0 0 0;
+}
+
+#postModalContainer {
+	position: relative;
+}
+
+#postModalOverlay {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #333;
+	opacity: .5;
+}
+
+#postModal {
+	position: fixed;
+	background-color: #fff;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	min-height: 300px;
+	overflow: scroll;
+	height: 50vh;
+	padding: 1em;
+}
+
+#postModal label, #postModal input {
+	width: 100%;
+}
+
+#postModal #modalClose {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+#postSave {
+	background-color: #0055aa;
+	border: 2px solid #333;
+	padding: .5em;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.new-post-container {
+	text-align: right;
+}
+
+.new-post {
+	margin-top: 1em;
+	margin-right: 1em;
+	border: 1px solid #888;
+	border-radius: 4px;
+	padding: .2em 1em;
+}
+
+.comment-container {
+	margin-top: 2em;
+}
+
+.comment {
+	padding: 1em;
+	min-height: 120px;
+	border-top: 1px solid #888888;
+	margin: 0 5em 1em 5em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.comment p {
+	margin: 0;
+}
+
+.comment-body {
+	padding: .5em 0;
+}
+
+.comment-footer-top-row {
+	display: flex;
+	justify-content: space-between;
+	padding: .5em 0;
+}
+
+.comment-vote-score {
+	padding: 0 .5em;
+}
+
+.comment-author {
+	padding: 0 0 0 .5em;
+	font-style: italic;
+}
+
+.comment-controls {
+	display: flex;
+	justify-content: space-between;
+	padding: 1em 0 0 0;
+}
+
+#commentModalContainer {
+	position: relative;
+}
+
+#commentModalOverlay {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #333;
+	opacity: .5;
+}
+
+#commentModal {
+	position: fixed;
+	background-color: #fff;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	min-height: 300px;
+	overflow: scroll;
+	height: 40vh;
+	padding: 1em;
+}
+
+#commentModal label,
+#commentModal input {
+	width: 100%;
+}
+
+#commentModal #modalClose {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+#commentSave {
+	background-color: #0055aa;
+	border: 2px solid #333;
+	padding: .5em;
+	text-transform: uppercase;
+	color: #fff;
+}

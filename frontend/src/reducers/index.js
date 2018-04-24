@@ -16,7 +16,11 @@ import { combineReducers } from 'redux'
 import sortBy from 'sort-by'
 
 function posts(state = [], action) {
-	let { posts, post, id, comment, addOrSubtract } = action
+	const { posts, post, id, comment, addOrSubtract } = action
+	let parentPost
+	if (comment) {
+		parentPost = state.filter(p => p.id === comment.parentId)[0]
+	}
 	switch(action.type) {
 		case GET_POSTS:
 			return posts.sort(sortBy('timestamp'))
@@ -35,8 +39,6 @@ function posts(state = [], action) {
 
 		case ADD_COMMENT:
 		case DELETE_COMMENT:
-			let parentPost = state.filter(p => p.id === comment.parentId)[0]
-			console.log(comment)
 			addOrSubtract === "add" 
 				? parentPost = Object.assign({ commentCount: parentPost.commentCount++ }, parentPost) 
 				: parentPost = Object.assign({ commentCount: parentPost.commentCount-- }, parentPost)
@@ -49,9 +51,9 @@ function posts(state = [], action) {
 }
 
 function categories(state = [], action) {
+	const { categories } = action
 	switch(action.type) {
 		case GET_CATEGORIES:
-			let { categories } = action
 			return state.concat(categories)
 		
 		default:
@@ -60,7 +62,7 @@ function categories(state = [], action) {
 }
 
 function comments(state = [], action) {
-	let { comment, comments } = action
+	const { comment, comments } = action
 	switch(action.type) {
 		case GET_COMMENTS:
 			return comments.sort(sortBy('timestamp'))

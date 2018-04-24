@@ -65,16 +65,12 @@ const Post = (props) => {
 	)
 }
 
-const mapStateToProps = () => {
-	return { }
-}
-
 const mapDispatchToProps = dispatch => ({
 	deletePost: id => dispatch(actions.deletePost(id)),
 	updateVotes: post => dispatch(actions.updatePostVote(post))
 })
 
 export default connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps
 )(Post)

@@ -5,36 +5,26 @@ import * as actions from '../actions'
 import Post from './Post'
 import Comment from './Comment'
 import CommentModal from './CommentModal'
-import sortBy from 'sort-by'
+
+const defaultState = {
+	modalContent: {
+		body: '',
+		author: '',
+		id: ''
+	},
+	modalShowing: false
+}
 
 class PostDetail extends Component {
-	state = {
-		modalContent: {
-			body: '',
-			author: '',
-			id: ''
-		},
-		modalShowing: false
-	}
+	state = defaultState
 
 	componentDidMount() {
-		api.getComments(this.props.post.id).then(comments => {
-			this.props.loadComments(comments)
-		})
-	}
-
-	deleteComment = (id) => {
-		fetch(`http://localhost:3001/comments/${id}`, {
-			headers: {
-				'Authorization': 'Things and Stuff',
-			},
-			method: 'DELETE'
-		}).then(data => {
-			this.setState(prevState => ({
-				comments: prevState.comments.filter(comments => comments.id !== id),
-			}))
-			this.props.updateCommentCount("delete", this.props.post.id)
-		})
+		// eslint-disable-next-line
+		this.props.post 
+			? api.getComments(this.props.post.id).then(comments => {
+				this.props.loadComments(comments)
+			})
+			: null
 	}
 
 	handleSubmit = (id, body, author) => {
@@ -46,62 +36,6 @@ class PostDetail extends Component {
 		this.closeCommentModal()
 	}
 
-	submitEditedComment = (id, body) => {
-		fetch(`http://localhost:3001/comments/${id}`, {
-			headers: {
-				'Authorization': 'Things and Stuff',
-				'Content-Type': 'application/json'
-			},
-			method: 'PUT',
-			body: JSON.stringify({
-				"body": body,
-				"timestamp": Date.now()
-			})
-		})
-			.then(data => data.json())
-			.then(data => {
-				this.setState(prevState => ({
-					comments: prevState.comments.filter(comment => comment.id !== id).concat([data]).sort(sortBy('timestamp')),
-					modalContent: {
-						body: '',
-						author: '',
-						id: ''
-					},
-					modalShowing: false
-				}))
-			})
-	}
-
-	submitNewComment = (body, author) => {
-		fetch('http://localhost:3001/comments', {
-			headers: {
-				'Authorization': 'Things and Stuff',
-				'Content-Type': 'application/json'
-			},
-			method: 'POST',
-			body: JSON.stringify({
-				"id": Math.random().toString(36).substr(2, 9),
-				"timestamp": Date.now(),
-				"body": body,
-				"author": author,
-				"parentId": this.props.post.id
-			})
-		})
-			.then(data => data.json())
-			.then(data => {
-				this.setState(prevState => ({
-					comments: prevState.comments.concat([data]).sort(sortBy('timestamp')),
-					modalContent: {
-						body: '',
-						author: '',
-						id: ''
-					},
-					modalShowing: false
-				}))
-				this.props.updateCommentCount("add", this.props.post.id)
-			})
-	}
-
 	showCommentModal = () => {
 		this.setState({
 			modalShowing: true
@@ -109,17 +43,10 @@ class PostDetail extends Component {
 	}
 
 	closeCommentModal = () => {
-		this.setState({
-			modalContent: {
-				body: "",
-				author: "",
-				id: ""
-			},
-			modalShowing: false
-		})
+		this.setState(defaultState)
 	}
 
-	populateModal = (id, body, author) => {
+	populateModal = ({id, body, author}) => {
 		this.setState({
 			modalContent: {
 				body,
@@ -133,15 +60,21 @@ class PostDetail extends Component {
 	render() {
 		return (
 			<div className="single-post">
-				<Post showPostLink={false} info={this.props.post} populateModal={this.props.populateModal} changeVote={this.props.changeVote} deletePost={this.props.deletePost} />
-				<div className="new-post-container">
-					<button onClick={this.showCommentModal} className="new-post">Reply</button>
-				</div>
-				<div className="comment-container">
-					{this.props.comments.map(comment => (
-						<Comment editComment={this.populateModal} key={comment.id} changeCommentVote={this.changeCommentVote} comment={comment} />
-					))}
-				</div>
+				{this.props.post 
+					? <div>
+						<Post showPostLink={false} info={this.props.post} editPost={this.props.populateModal} />
+						<div className="new-post-container">
+							<button onClick={this.showCommentModal} className="new-post">Reply</button>
+						</div>
+						<div className="comment-container">
+							{this.props.comments.map(comment => (
+								<Comment editComment={this.populateModal} key={comment.id} comment={comment} />
+							))}
+						</div>
+					</div>
+					: <div className="not-found">This Post has been deleted.</div>
+				}
+				
 				{this.state.modalShowing && <CommentModal handleSubmit={this.handleSubmit} closeModal={this.closeCommentModal} id={this.state.modalContent.id} body={this.state.modalContent.body} author={this.state.modalContent.author} />}
 			</div>
 		)

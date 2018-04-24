@@ -231,3 +231,8 @@ h3 {
 	text-transform: uppercase;
 	color: #fff;
 }
+
+.not-found {
+	text-align: center;
+	font-weight: bold;
+}

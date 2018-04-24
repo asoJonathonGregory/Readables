@@ -19,7 +19,8 @@ class Comment extends Component {
 	}
 
 	editComment = () => {
-		this.props.editComment(this.props.comment.id, this.props.comment.body, this.props.comment.author, this.props.parentId)
+		const { comment, editComment } = this.props
+		editComment(comment)
 	}
 
 	render() {
@@ -58,16 +59,12 @@ class Comment extends Component {
 	}
 }
 
-const mapStateToProps = () => {
-	return {}
-}
-
 const mapDispatchToProps = dispatch => ({
 	deleteComment: comment => dispatch(actions.deleteComment(comment, comment.parentId, 'delete')),
 	updateVotes: comment => dispatch(actions.updateCommentVote(comment, comment.parentId))
 })
 
 export default connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps
 )(Comment)

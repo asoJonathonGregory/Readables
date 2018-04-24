@@ -12,9 +12,9 @@ To get started developing right away and/or viewing the application:
     - `cd api-server`
     - `npm install`
     - `node server`
-* In another terminal window, use Create React App to scaffold out the front-end
-    - `create-react-app frontend`
+* In another terminal window, install the dependencies and build out the project
     - `cd frontend`
+    - `npm install`
     - `npm start`
 
 ## API Server

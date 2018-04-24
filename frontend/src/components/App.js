@@ -13,26 +13,26 @@ import PostModal from './PostModal';
 import '../App.css';
 
 const history = createBrowserHistory();
+const defaultState = {
+	modalContent: {
+		title: "",
+		body: "",
+		author: "",
+		id: "",
+		category: ""
+	},
+	modalShowing: false
+}
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-		// eslint-disable-next-line
-		history.location.pathname.split('/')[1] === "All" ? history.push('/') : null;
-
-		this.state = {
-			modalContent: {
-				title: "",
-				body: "",
-				author: "",
-				id: "",
-				category: ""
-			},
-			modalShowing: false
-		}
+		this.state = defaultState
 	}
 
 	componentDidMount() {
+		// eslint-disable-next-line
+		history.location.pathname.split('/')[1] === "All" ? history.push('/') : null;
 		api.getPosts()
 			.then(posts => {
 				this.props.loadPosts(posts)
@@ -60,16 +60,7 @@ class App extends Component {
 	}
 
 	closeModal = () => {
-		this.setState({
-			modalContent: {
-				title: "",
-				body: "",
-				author: "",
-				id: "",
-				category: ""
-			},
-			modalShowing: false
-		})
+		this.setState(defaultState)
 	}
 
 	populateModal = (id, title, body, author, category) => {
@@ -127,7 +118,7 @@ class App extends Component {
 					</div>
 					<div className="body-section">
 						<Route exact path="/" render={() => (
-							<MainPage posts={this.props.posts} populateModal={this.populateModal} changeVote={this.changeVote} />
+							<MainPage posts={this.props.posts} populateModal={this.populateModal} />
 						)} />
 						<Route exact path="/:category" render={({match}) => (
 							<CategoryPage posts={this.props.posts.filter(post => post.category === match.params.category)} />

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as api from '../ReadablesAPI'
 import * as actions from '../actions'
 import Post from './Post'
 import Comment from './Comment'
@@ -19,21 +18,21 @@ class PostDetail extends Component {
 	state = defaultState
 
 	componentDidMount() {
+		const { post, loadComments } = this.props
 		// eslint-disable-next-line
-		this.props.post 
-			? api.getComments(this.props.post.id).then(comments => {
-				this.props.loadComments(comments)
-			})
+		post 
+			? loadComments(post.id)
 			: null
 	}
 
-	handleSubmit = (id, body, author) => {
-		id === ""
-			? api.newComment(body, author, this.props.post.id).then(comment => this.props.addComment(comment))
-			: api.editComment(id, body).then(comment => {
-				this.props.editComment(comment)
-			})
-		this.closeCommentModal()
+	componentWillUnmount() {
+		this.props.clearComments()
+	}
+
+	handleSubmit = (comment) => {
+		const { post, submitComment } = this.props
+		comment.parentId = post.id
+		submitComment(comment)
 	}
 
 	showCommentModal = () => {
@@ -88,9 +87,9 @@ const mapStateToProps = ({ comments }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-	loadComments: comments => dispatch(actions.getComments(comments)),
-	editComment: comment => dispatch(actions.editComment(comment)),
-	addComment: comment => dispatch(actions.addComment(comment, 'add'))
+	loadComments: id => dispatch(actions.loadComments(id)),
+	submitComment: (comment) => dispatch(actions.submitComment(comment)),
+	clearComments: () => dispatch(actions.clearComments())
 })
 
 export default connect(

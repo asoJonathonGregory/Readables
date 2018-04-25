@@ -1,26 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as api from '../ReadablesAPI'
 import * as actions from '../actions'
 import { FaEdit, FaEraser, FaThumbsOUp, FaThumbsODown } from 'react-icons/lib/fa'
 
 class Comment extends Component {
+
 	addVote = () => {
-		api.changeCommentVote(this.props.comment.id, 'up').then(comment => this.props.updateVotes(comment))
+		this.props.updateVotes(this.props.comment.id, 'up')
 	}
 
 	subtractVote = () => {
-		api.changeCommentVote(this.props.comment.id, 'down').then(comment => this.props.updateVotes(comment))
+		this.props.updateVotes(this.props.comment.id, 'down')
 	}
 
 	deleteComment = () => {
-		api.deleteComment(this.props.comment).then(comment => this.props.deleteComment(comment))
-		
+		this.props.deleteComment(this.props.comment)
 	}
 
 	editComment = () => {
-		const { comment, editComment } = this.props
-		editComment(comment)
+		this.props.editComment(this.props.comment)
 	}
 
 	render() {
@@ -60,8 +58,8 @@ class Comment extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	deleteComment: comment => dispatch(actions.deleteComment(comment, comment.parentId, 'delete')),
-	updateVotes: comment => dispatch(actions.updateCommentVote(comment, comment.parentId))
+	deleteComment: comment => dispatch(actions.removeComment(comment)),
+	updateVotes: (id, typeOfVote) => dispatch(actions.changeCommentVote(id, typeOfVote))
 })
 
 export default connect(

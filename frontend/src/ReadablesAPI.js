@@ -10,7 +10,6 @@ export const getPosts = () => {
 	})
 	.then(data => data.json())
 	.then(data => data)
-	.then(data => data)
 }
 
 export function getCategories() {
@@ -18,12 +17,11 @@ export function getCategories() {
 		headers: headers,
 		method: 'GET'
 	})
-		.then(data => data.json())
-		.then(data => data.categories)
+	.then(data => data.json())
+	.then(data => data.categories)
 }
 
 export function getComments(id) {
-	console.log('getting comments for post: ' + id)
 	return fetch(`http://localhost:3001/posts/${id}/comments`, {
 		headers: headers,
 		method: "GET"
@@ -47,6 +45,7 @@ export function changePostVote(id, typeOfVote) {
 }
 
 export function changeCommentVote(id, typeOfVote) {
+	console.log(id, typeOfVote)
 	return fetch(`http://localhost:3001/comments/${id}`, {
 		headers: headers,
 		method: 'POST',
@@ -79,7 +78,7 @@ export function deleteComment(comment) {
 	})
 }
 
-export function newPost(title, body, author, category) {
+export function newPost({title, body, author, category}) {
 	return fetch('http://localhost:3001/posts', {
 		headers: headers,
 		method: 'POST',
@@ -96,7 +95,7 @@ export function newPost(title, body, author, category) {
 	.then(data => data)
 }
 
-export function newComment(body, author, parentId) {
+export function newComment({body, author, parentId}) {
 	return fetch('http://localhost:3001/comments', {
 		headers: headers,
 		method: 'POST',
@@ -112,7 +111,7 @@ export function newComment(body, author, parentId) {
 	.then(data => data)
 }
 
-export function editPost(id, title, body) {
+export function editPost({id, title, body}) {
 	return fetch(`http://localhost:3001/posts/${id}`, {
 		headers: headers,
 		method: 'PUT',
@@ -126,7 +125,7 @@ export function editPost(id, title, body) {
 	.then(data => data)
 }
 
-export function editComment(id, body) {
+export function editComment({id, body}) {
 	return fetch(`http://localhost:3001/comments/${id}`, {
 		headers: headers,
 		method: 'PUT',

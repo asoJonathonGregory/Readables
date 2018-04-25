@@ -9,18 +9,22 @@ import {
 	CHANGE_POST_VOTE,
 	CHANGE_COMMENT_VOTE,
 	DELETE_POST,
-	DELETE_COMMENT
+	DELETE_COMMENT,
+	CLEAR_COMMENTS
 } from '../actions'
 
 import { combineReducers } from 'redux'
 import sortBy from 'sort-by'
 
-function posts(state = [], action) {
+const initialState = []
+
+function posts(state = initialState, action) {
 	const { posts, post, id, comment, addOrSubtract } = action
 	let parentPost
 	if (comment) {
 		parentPost = state.filter(p => p.id === comment.parentId)[0]
 	}
+	
 	switch(action.type) {
 		case GET_POSTS:
 			return posts.sort(sortBy('timestamp'))
@@ -50,7 +54,7 @@ function posts(state = [], action) {
 	}
 }
 
-function categories(state = [], action) {
+function categories(state = initialState, action) {
 	const { categories } = action
 	switch(action.type) {
 		case GET_CATEGORIES:
@@ -61,11 +65,14 @@ function categories(state = [], action) {
 	}
 }
 
-function comments(state = [], action) {
+function comments(state = initialState, action) {
 	const { comment, comments } = action
 	switch(action.type) {
 		case GET_COMMENTS:
 			return comments.sort(sortBy('timestamp'))
+
+		case CLEAR_COMMENTS:
+			return initialState
 
 		case ADD_COMMENT:
 			return state.concat([comment]).sort(sortBy('timestamp'))

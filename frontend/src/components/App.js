@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Router, Route, Link } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import * as actions from '../actions';
-import * as api from '../ReadablesAPI';
 import MainHeader from './MainHeader';
 import MainPage from './MainPage';
 import CategoryControls from './CategoryControls';
@@ -33,24 +32,8 @@ class App extends Component {
 	componentDidMount() {
 		// eslint-disable-next-line
 		history.location.pathname.split('/')[1] === "All" ? history.push('/') : null;
-		api.getPosts()
-			.then(posts => {
-				this.props.loadPosts(posts)
-			})
-		api.getCategories()
-			.then(categories => {
-				this.props.loadCategories(categories)
-			})
-	}
-
-	handleSubmit = (id, title, body, author, category) => {
-		id === "" 
-			? api.newPost(title, body, author, category).then(post => this.props.addPost(post))
-			: api.editPost(id, title, body).then(post => {
-				console.log(post)
-				this.props.editPost(post)}
-			)
-		this.closeModal()
+		this.props.loadPosts()
+		this.props.loadCategories()
 	}
 
 	showModal = () => {
@@ -63,7 +46,7 @@ class App extends Component {
 		this.setState(defaultState)
 	}
 
-	populateModal = (id, title, body, author, category) => {
+	populateModal = ({id, title, body, author, category}) => {
 		this.setState({
 			modalContent: {
 				title,
@@ -130,7 +113,7 @@ class App extends Component {
 						}} />
 					</div>
 					
-					{this.state.modalShowing && <PostModal categories={this.props.categories} handleSubmit={this.handleSubmit} closeModal={this.closeModal} id={this.state.modalContent.id} title={this.state.modalContent.title} body={this.state.modalContent.body} author={this.state.modalContent.author} category={this.state.modalContent.category} />}
+					{this.state.modalShowing && <PostModal categories={this.props.categories} closeModal={this.closeModal} id={this.state.modalContent.id} title={this.state.modalContent.title} body={this.state.modalContent.body} author={this.state.modalContent.author} category={this.state.modalContent.category} />}
 				</div>
 			</Router>
 		);
@@ -145,10 +128,8 @@ const mapStateToProps = ({ posts, categories }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-	loadPosts: posts => dispatch(actions.getPosts(posts)),
-	loadCategories: categories => dispatch(actions.getCategories(categories)),
-	editPost: post => dispatch(actions.editPost(post)),
-	addPost: post => dispatch(actions.addPost(post))
+	loadPosts: () => dispatch(actions.loadPosts()),
+	loadCategories: () => dispatch(actions.loadCategories()),
 })
 
 export default connect(

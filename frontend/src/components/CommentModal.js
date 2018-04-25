@@ -25,13 +25,9 @@ class CommentModal extends Component {
 		})
 	}
 
-	closeModal = () => {
-		this.props.closeModal();
-	}
-
 	saveComment = () => {
-		const { id, body, author } = this.state;
-		this.props.handleSubmit(id, body, author);
+		this.props.handleSubmit(this.state)
+		this.props.closeModal()
 	}
 
 	render() {
@@ -48,7 +44,7 @@ class CommentModal extends Component {
 						<input disabled={this.props.id === "" ? false : true} onChange={this.handleAuthorInput} type="text" id="commentAuthor" value={this.state.author} />
 					</div>
 					<button onClick={this.saveComment} id="commentSave">Save</button>
-					<button onClick={this.closeModal} id="modalClose">X</button>
+					<button onClick={this.props.closeModal} id="modalClose">X</button>
 				</div>
 			</div>
 		)

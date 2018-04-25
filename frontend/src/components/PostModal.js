@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import * as actions from '../actions'
 
 class PostModal extends Component {
 	state = {
@@ -6,7 +8,7 @@ class PostModal extends Component {
 		title: this.props.title,
 		body: this.props.body,
 		author: this.props.author,
-		category: this.props.category || "All"
+		category: this.props.category
 	}
 
 	changeHandler = (e) => {
@@ -33,13 +35,9 @@ class PostModal extends Component {
 		})
 	}
 
-	closeModal = () => {
-		this.props.closeModal();
-	}
-
 	savePost = () => {
-		const { id, title, body, author, category } = this.state;
-		this.props.handleSubmit(id, title, body, author, category);
+		this.props.submitPost(this.state);
+		this.props.closeModal();
 	}
 
 	render() {
@@ -60,19 +58,26 @@ class PostModal extends Component {
 						<input disabled={this.props.id === "" ? false : true} onChange={this.handleAuthorInput} type="text" id="postAuthor" value={this.state.author} />
 					</div>
 					{this.props.categories.length > 0 && (
-						<select onChange={this.changeHandler} defaultValue={this.props.category === "" ? "All" : this.props.category}>
-							<option disabled value="All">All</option>
+						<select onChange={this.changeHandler} defaultValue={this.state.category}>
+							<option disabled value="">Select a Category</option>
 							{this.props.categories.map(category => (
 								<option value={category.name} key={category.name}>{category.name.substr(0, 1).toUpperCase() + category.name.substr(1)}</option>
 							))}
 						</select>
 					)}
 					<button onClick={this.savePost} id="postSave">Save</button>
-					<button onClick={this.closeModal} id="modalClose">X</button>
+					<button onClick={this.props.closeModal} id="modalClose">X</button>
 				</div>
 			</div>
 		)
 	}
 }
 
-export default PostModal;
+const mapDispatchToProps = dispatch => ({
+	submitPost: post => dispatch(actions.submitPost(post))
+})
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(PostModal);

@@ -2,31 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import * as api from '../ReadablesAPI';
 import { FaEdit, FaEraser, FaThumbsOUp, FaThumbsODown } from 'react-icons/lib/fa';
 
 const Post = (props) => {
 	const info = props.info
 	const addVote = function() {
-		api.changePostVote(info.id, 'up').then(post => {
-			props.updateVotes(post)
-		})
+		props.changePostVote(info.id, 'up')
 	}
 
 	const subtractVote = function () {
-		api.changePostVote(info.id, 'down').then(post => {
-			props.updateVotes(post)
-		})
+		props.changePostVote(info.id, 'down')
 	}
 
 	const deletePost = function() {
-		api.deletePost(info.id).then(post => {
-			props.deletePost(post.id)
-		})
+		props.deletePost(info.id)
 	}
 
-	const editPost = function() {
-		props.editPost(info.id, info.title, info.body, info.author)
+	const editPost = () => {
+		props.editPost(info)
 	}
 
 	return (
@@ -66,8 +59,8 @@ const Post = (props) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-	deletePost: id => dispatch(actions.deletePost(id)),
-	updateVotes: post => dispatch(actions.updatePostVote(post))
+	deletePost: id => dispatch(actions.removePost(id)),
+	changePostVote: (id, typeOfVote) => dispatch(actions.changePostVote(id, typeOfVote))
 })
 
 export default connect(
